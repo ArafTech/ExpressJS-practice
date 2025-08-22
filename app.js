@@ -1,24 +1,22 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const rootDir = require('./src/utils/path');
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+import express from 'express';
+import ProductController from './src/controllers/products.controller.js';
+import path from 'path';
+// const ejsLayouts = require('express-ejs-Layouts');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const server = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+server.set('view engine', 'ejs');
+server.set('views', path.join(path.resolve(), 'src', 'views'))
 
-// app.use('/admin',adminRoutes);
-// app.use('/',shopRoutes);
+// server.use(ejsLayouts);
 
+server.use(express.static('src/views'))
 
-app.use((req, res) => {
-    res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
-});
+//instance of ProductController
+const productController = new ProductController();
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+server.get('/', productController.getproducts);
+
+server.listen(3400,()=>{
+  console.log('server is listening on port 3400')
 });

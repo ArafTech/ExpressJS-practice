@@ -10,7 +10,19 @@ export default class ProductModel {
     static get(){
         return products;
     }
-
+    static add(product){
+        product.id = products.length + 1;
+        products.push(new ProductModel(product.id, product.name, product.desc, product.price, product.imageUrl));
+    }
+    static update(id, updatedProduct){
+        const index = products.findIndex(p => p.id === id);
+        if(index !== -1){
+            products[index] = { id, ...updatedProduct };
+        }
+    }
+    static delete(id){
+        products = products.filter(p => p.id !== id);
+    }
 
 }
 
